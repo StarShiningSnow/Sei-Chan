@@ -1,8 +1,6 @@
 import aiohttp
 from data import secret
 
-client = aiohttp.ClientSession()
-
 async def generate(prompt:str)->str:
     payload = {
         "model":"sorc/qwen3.5-instruct-uncensored:2b",
@@ -17,8 +15,9 @@ async def generate(prompt:str)->str:
     }
 
     try:
-        async with client.post(secret.ai_url,json=payload) as response:
-            data = await response.json()
+        async with aiohttp.ClientSession() as session:
+            async with session.post(secret.ai_url,json=payload) as response:
+                data = await response.json()
         return data["response"]
     except Exception:
         return "Someone tell StarShiningSnow there is a problem with my AI."
