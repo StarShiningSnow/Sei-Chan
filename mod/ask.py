@@ -3,6 +3,7 @@ from ai import ai_main,mode
 def setup(tree):
     @tree.command(name="ask",description="詢問AI")
     async def ask(interaction,question:str):
+        await interaction.response.defer()
 
         reply = await ai_main.chat(
             user_id=interaction.user.id,
@@ -11,4 +12,4 @@ def setup(tree):
             mode=mode.AIMode.ASK,
         )
 
-        await interaction.response.send_message(reply)
+        await interaction.followup.send(reply)
