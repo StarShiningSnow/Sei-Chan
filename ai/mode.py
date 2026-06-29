@@ -5,3 +5,7 @@ class AIMode(StrEnum):
     MC = "mc"
     MAP = "map"
     INTRO = "intro"
+
+class AIRole(StrEnum):
+    USER = "user"
+    ASSISTANT = "assistant"
