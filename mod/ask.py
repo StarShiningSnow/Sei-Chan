@@ -1,7 +1,7 @@
 from ai import ai_main,mode
 
 def setup(tree):
-    @tree.command(name="ask",description="詢問AI")
+    @tree.command(name="ask",description="直接和星輝醬對話吧！")
     async def ask(interaction,question:str):
         await interaction.response.defer()
 
