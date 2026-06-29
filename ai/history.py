@@ -1,6 +1,6 @@
 from pathlib import Path
 import json
-from ai.mode import AIRole
+from .mode import AIRole
 
 HISTORY_DIR = Path("data/history")
 
