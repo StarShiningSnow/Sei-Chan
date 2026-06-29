@@ -7,7 +7,6 @@ def setup(tree):
 
         reply = await ai_main.chat(
             user_id=interaction.user.id,
-            username=interaction.user.display_name,
             message=question,
             mode=mode.AIMode.ASK,
         )
