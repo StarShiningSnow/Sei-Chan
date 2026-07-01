@@ -23,24 +23,24 @@ jobs:
             const release = context.payload.release;
             const repo = context.repo;
 
+            const logo = "https://raw.githubusercontent.com/StarShiningSnow/Sei-Chan/main/assets/bot_logo.png";
+
             const color = release.prerelease
-              ? 0xFAA61A   // 橘色：Pre-release
-              : 0x57F287;  // 綠色：Release
+              ? 0xFAA61A
+              : 0x57F287;
 
             const type = release.prerelease
               ? "🧪 Pre-release"
               : "🚀 Release";
 
             const body =
-              release.body && release.body.trim().length > 0
+              release.body?.trim()
                 ? release.body
                 : "*本次未提供更新說明。*";
 
             const payload = {
               username: "Project SeiChan",
-
-              avatar_url:
-                "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+              avatar_url: logo,
 
               embeds: [
                 {
@@ -54,8 +54,11 @@ jobs:
                   author: {
                     name: `${repo.owner}/${repo.repo}`,
                     url: `https://github.com/${repo.owner}/${repo.repo}`,
-                    icon_url:
-                      "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                    icon_url: logo
+                  },
+
+                  thumbnail: {
+                    url: logo
                   },
 
                   fields: [
@@ -79,7 +82,8 @@ jobs:
                   timestamp: release.published_at,
 
                   footer: {
-                    text: "Project SeiChan • GitHub Releases"
+                    text: "Project SeiChan • GitHub Releases",
+                    icon_url: logo
                   }
                 }
               ]
