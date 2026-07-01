@@ -1,50 +1,100 @@
-name: Discord Release
+name: Discord Release Notification
 
 on:
   release:
-    types: [published]
+    types:
+      - published
+
+permissions:
+  contents: read
 
 jobs:
   notify:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Send release to Discord
+      - name: Send Discord notification
+        uses: actions/github-script@v7
         env:
-          WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: |
-          curl -H "Content-Type: application/json" \
-          -d "$(jq -n \
-            --arg title "${{ github.event.release.name }}" \
-            --arg version "${{ github.event.release.tag_name }}" \
-            --arg body "${{ github.event.release.body }}" \
-            --arg url "${{ github.event.release.html_url }}" \
-            --arg type "$(if [ "${{ github.event.release.prerelease }}" = "true" ]; then echo "🧪 Pre-release"; else echo "🚀 Release"; fi)" \
-            '{
-              embeds: [{
-                title: $title,
-                url: $url,
-                color: 3447003,
-                fields: [
-                  {
-                    name: "版本",
-                    value: $version,
-                    inline: true
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+        with:
+          script: |
+            const release = context.payload.release;
+            const repo = context.repo;
+
+            const color = release.prerelease
+              ? 0xFAA61A   // 橘色：Pre-release
+              : 0x57F287;  // 綠色：Release
+
+            const type = release.prerelease
+              ? "🧪 Pre-release"
+              : "🚀 Release";
+
+            const body =
+              release.body && release.body.trim().length > 0
+                ? release.body
+                : "*本次未提供更新說明。*";
+
+            const payload = {
+              username: "Project SeiChan",
+
+              avatar_url:
+                "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+
+              embeds: [
+                {
+                  title: release.name || release.tag_name,
+                  url: release.html_url,
+
+                  description: body,
+
+                  color: color,
+
+                  author: {
+                    name: `${repo.owner}/${repo.repo}`,
+                    url: `https://github.com/${repo.owner}/${repo.repo}`,
+                    icon_url:
+                      "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
                   },
-                  {
-                    name: "類型",
-                    value: $type,
-                    inline: true
-                  },
-                  {
-                    name: "更新內容",
-                    value: (if ($body == "") then "無更新說明" else $body end),
-                    inline: false
+
+                  fields: [
+                    {
+                      name: "🏷️ 版本",
+                      value: `\`${release.tag_name}\``,
+                      inline: true
+                    },
+                    {
+                      name: "📦 類型",
+                      value: type,
+                      inline: true
+                    },
+                    {
+                      name: "👤 作者",
+                      value: release.author.login,
+                      inline: true
+                    }
+                  ],
+
+                  timestamp: release.published_at,
+
+                  footer: {
+                    text: "Project SeiChan • GitHub Releases"
                   }
-                ],
-                footer: {
-                  text: "GitHub Release"
                 }
-              }]
-            }')" \
-          "$WEBHOOK_URL"
+              ]
+            };
+
+            const response = await fetch(process.env.DISCORD_WEBHOOK_URL, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+              core.setFailed(
+                `Discord Webhook failed (${response.status}): ${await response.text()}`
+              );
+            }
