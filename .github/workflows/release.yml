@@ -1,0 +1,50 @@
+name: Discord Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send release to Discord
+        env:
+          WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d "$(jq -n \
+            --arg title "${{ github.event.release.name }}" \
+            --arg version "${{ github.event.release.tag_name }}" \
+            --arg body "${{ github.event.release.body }}" \
+            --arg url "${{ github.event.release.html_url }}" \
+            --arg type "$(if [ "${{ github.event.release.prerelease }}" = "true" ]; then echo "🧪 Pre-release"; else echo "🚀 Release"; fi)" \
+            '{
+              embeds: [{
+                title: $title,
+                url: $url,
+                color: 3447003,
+                fields: [
+                  {
+                    name: "版本",
+                    value: $version,
+                    inline: true
+                  },
+                  {
+                    name: "類型",
+                    value: $type,
+                    inline: true
+                  },
+                  {
+                    name: "更新內容",
+                    value: (if ($body == "") then "無更新說明" else $body end),
+                    inline: false
+                  }
+                ],
+                footer: {
+                  text: "GitHub Release"
+                }
+              }]
+            }')" \
+          "$WEBHOOK_URL"
