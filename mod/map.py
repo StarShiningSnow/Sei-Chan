@@ -8,7 +8,7 @@ def setup(tree):
     async def map(interaction):
         await interaction.response.defer()
         try:
-            ai_task = asyncio.create_task(model.generate("想像一張記錄Minecraft伺服器最新樣貌的地圖","創作一句富有情感的短句，以一至三句自然完成。",temperature=0.7,num_predict=500,num_ctx=1024))
+            ai_task = asyncio.create_task(model.generate("想像一張記錄Minecraft伺服器最新樣貌的地圖","創作抒情的極短詩歌。",temperature=0.7,num_predict=500,num_ctx=1024))
             async with async_playwright() as p:
                 browser = await p.chromium.launch(headless=True)
                 page = await browser.new_page(viewport={"width":1440,"height":1440})

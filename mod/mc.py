@@ -3,7 +3,7 @@ from mcstatus import JavaServer
 from ai import model
 from data import secret
 
-MC_SYSTEM = "根據伺服器資訊創作抒情的短句。"
+MC_SYSTEM = "根據伺服器資訊創作抒情的極短詩歌。"
 
 def setup(tree):
     @tree.command(name="mc",description="查看Minecraft伺服器即時資訊")
