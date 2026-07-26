@@ -1,6 +1,4 @@
-from .mode import AIMode,AIRole
-
-def build(history:list,message:str,mode:AIMode,)->str:
+def build(history:list,message:str)->str:
     lines = []
 
     lines.append("以下是提供給 Assistant 的資訊。")
@@ -8,14 +6,10 @@ def build(history:list,message:str,mode:AIMode,)->str:
     lines.append("CURRENT MESSAGE 是目前需要回答的訊息。")
     lines.append("")
 
-    lines.append("===== MODE =====")
-    lines.append(mode.value)
-    lines.append("")
-
     lines.append("===== HISTORY =====")
     if history:
         for chat in history:
-            role = "User" if chat["role"] == AIRole.USER.value else "Assistant"
+            role = "User" if chat["role"] == "user" else "Assistant"
             lines.append(f"{role}: {chat['content']}")
     else:
         lines.append("(None)")

@@ -1,6 +1,5 @@
 from pathlib import Path
 import json
-from .mode import AIRole
 
 HISTORY_DIR = Path("data/history")
 
@@ -30,11 +29,11 @@ def save(user_id:int,history:list)->None:
             ensure_ascii=False,
             indent=4,)
 
-def append(user_id:int,role:AIRole,content:str)->None:
+def append(user_id:int,role:str,content:str)->None:
     history = load(user_id)
     history.append(
         {
-            "role": role.value,
+            "role": role,
             "content": content,
         }
     )
