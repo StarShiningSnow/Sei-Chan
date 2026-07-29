@@ -6,7 +6,7 @@ from data import secret
 MC_SYSTEM = "根據伺服器資訊創作抒情的極短詩歌。"
 
 def setup(tree):
-    @tree.command(name="mc",description="查看Minecraft伺服器即時資訊")
+    @tree.command(name="mc",description="查看伺服器狀態！親愛的，今天也要跟星輝醬一起蓋家家嗎…？")
     async def mc(interaction):
         await interaction.response.defer()
         try:

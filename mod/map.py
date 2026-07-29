@@ -4,7 +4,7 @@ from data import secret
 from ai import model
 
 def setup(tree):
-    @tree.command(name="map",description="獲取神椿連邦帝國即時皇輿全覽圖")
+    @tree.command(name="map",description="遵命！這就為親愛的呈上～神椿連邦帝國的皇輿全覽圖！快讚美我吧～")
     async def map(interaction):
         await interaction.response.defer()
         try:
