@@ -1,12 +1,10 @@
-from mcstatus import JavaServer
-import discord,secret
+import discord,secret,mcstatus
 
 def setup(tree):
     @tree.command(description="皇帝陛下、総理閣下、並びに高官の皆様へ報告です。帝國情報ネットワークは極めて円滑に稼働しております！ (⁠✧⁠ω⁠✧⁠)")
     async def status(interaction):
-        await interaction.response.defer()
-        server = JavaServer.lookup(secret.lan_ip)
-        status = server.status()
+        await interaction.response.defer() 
+        status = mcstatus.JavaServer.lookup("127.0.0.1").status()
         embed = discord.Embed(title="🎮 帝国情報網 稼働状況報告",color=discord.Color.green(),description=f"```\n{status.description}\n```")
         embed.add_field(name="🌐 帝国接続拠点",value=f"`{secret.wan_ip}`",inline=False)
         embed.add_field(name="📌 運用規格",value=f"`{status.version.name}`",inline=True)

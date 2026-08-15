@@ -15,6 +15,6 @@ async def on_ready():
     global m2d_task
     await tree.sync()
     if not m2d_task or m2d_task.done():
-        m2d_task = asyncio.create_task(m2d.log(client.get_channel(secret.dc_id)))
+        m2d_task = asyncio.create_task(m2d.log(client.get_channel(int(secret.dc_id))))
 
 client.run(secret.dc_token)

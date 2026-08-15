@@ -1,7 +1,7 @@
-import asyncio,re,secret,discord
+import asyncio,re,discord,secret
 
 async def log(channel):
-    process = await asyncio.create_subprocess_exec("ssh",secret.ssh_pw,f"tail -f '{secret.log_path}'", stdout=asyncio.subprocess.PIPE)
+    process = await asyncio.create_subprocess_exec("tail", "-f", secret.log_path, stdout=asyncio.subprocess.PIPE)
     async for line in process.stdout: # type: ignore
         msg = line.decode().strip().split("]: ")[-1]
         if m := re.match(r"(.+) joined the game$", msg):
