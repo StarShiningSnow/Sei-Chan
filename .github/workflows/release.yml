@@ -23,7 +23,7 @@ jobs:
             const release = context.payload.release;
             const repo = context.repo;
 
-            const logo = "https://raw.githubusercontent.com/StarShiningSnow/Sei-Chan/main/assets/bot_logo_v2.png";
+            const logo = "https://raw.githubusercontent.com/StarShiningSnow/Sei-Chan/main/assets/bot_logo_v2.jpeg";
 
             const color = release.prerelease
               ? 0xFAA61A
