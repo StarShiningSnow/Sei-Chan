@@ -1,4 +1,4 @@
-# -Sei-Chan
+#Sei-Chan
 
 <div align="center">
 
